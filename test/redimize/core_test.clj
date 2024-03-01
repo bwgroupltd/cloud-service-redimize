@@ -28,9 +28,6 @@
 (def memoized-test5 (red/dual-memo conn slowly :expire 0))
 
 
-
-
-
 (deftest can-wrap-around
   (let [start (System/currentTimeMillis)]
     (is (= -1 (memoized-test -1)))
