@@ -1,7 +1,5 @@
 # redimize
 
-[![Clojars Project](https://img.shields.io/clojars/v/org.clojars.bigsy/redimize.svg)](https://clojars.org/org.clojars.bigsy/redimize)
-
 A Clojure library that provides two level caching to core.memoize then redis on cache miss
 
 ## Usage
