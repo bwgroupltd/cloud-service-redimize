@@ -1,7 +1,7 @@
 (ns redimize.core-test
   (:require [clojure.java.io :as io]
             [redimize.core :as red]
-            [clojure.test :refer [deftest is testing use-fixtures]]
+            [clojure.test :refer [deftest is testing use-fixtures run-tests]]
             [redis-embedded-clj.core :as sut]
             [taoensso.carmine :as car]))
 
@@ -101,3 +101,26 @@
     (is (= -1 (memoized-test5 -1)))
     (let [end (System/currentTimeMillis)]
       (is (<= 500 (- end start))))))
+
+(deftest direct-setting-and-getting
+  (testing "happy path"
+    (let [key "a:key"
+          val {:a "value"}
+          expire-seconds 2]
+      (is (= "OK" (red/set-key conn key val expire-seconds)))
+      (is (= val (red/get-key conn key)))
+
+      (Thread/sleep (* 1000 expire-seconds))
+      (is (nil? (red/get-key conn key)))))
+
+  (testing "broken connection"
+    (let [key "a:key"
+          val {:a "value"}
+          expire-seconds 2]
+
+      (prn "Setting key:" (red/set-key conn key val expire-seconds))
+      (prn "Reading from wrong conn:" (red/get-key conn-broken key))
+      (prn "Reading from working conn:" (red/get-key conn key))
+      )
+    )
+  )
