@@ -3,7 +3,8 @@
             [redimize.core :as red]
             [clojure.test :refer [deftest is testing use-fixtures run-tests]]
             [redis-embedded-clj.core :as sut]
-            [taoensso.carmine :as car]))
+            [taoensso.carmine :as car])
+  (:import (clojure.lang ExceptionInfo)))
 
 (use-fixtures :once sut/with-rd-fn)
 
@@ -113,14 +114,9 @@
       (Thread/sleep (* 1000 expire-seconds))
       (is (nil? (red/get-key conn key)))))
 
-  (testing "broken connection"
+  (testing "broken connection - exception is caught"
     (let [key "a:key"
           val {:a "value"}
           expire-seconds 2]
-
-      (prn "Setting key:" (red/set-key conn key val expire-seconds))
-      (prn "Reading from wrong conn:" (red/get-key conn-broken key))
-      (prn "Reading from working conn:" (red/get-key conn key))
-      )
-    )
-  )
+      (is (nil? (red/set-key conn-broken key val expire-seconds)))
+      (is (nil? (red/get-key conn-broken key))))))
