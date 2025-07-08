@@ -1,4 +1,4 @@
-(defproject audiogum/redimize "0.1.11-SNAPSHOT"
+(defproject audiogum/redimize "0.1.11"
   :description "two level memoize redis caching in clojure"
   :url "https://github.com/bwgroupltd/cloud-service-redimize"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
