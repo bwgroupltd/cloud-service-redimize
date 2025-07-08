@@ -3,10 +3,8 @@
             [taoensso.carmine :as car]
             [clojure.core.memoize :as cm]))
 
-(def pool-imp (delay (car/connection-pool {})))
-
 (defn check-opts [{:keys [pool host port spec]}]
-  {:pool (or pool @pool-imp)
+  {:pool (or pool (car/connection-pool {}))
    :spec (or spec {:host (or host (:host (car/make-conn-spec)))
                    :port (or port (:port (car/make-conn-spec)))})})
 
